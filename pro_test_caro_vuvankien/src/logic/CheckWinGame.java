@@ -90,6 +90,8 @@ public class CheckWinGame {
 					if (count == Constant.NUMBER_PIECE_WIN) {
 						return true;
 					}
+				} else {
+					count = 0;
 				}
 			}
 		}
@@ -133,6 +135,8 @@ public class CheckWinGame {
 					if (count == Constant.NUMBER_PIECE_WIN) {
 						return true;
 					}
+				} else {
+					count = 0;
 				}
 			}
 		}
@@ -176,6 +180,8 @@ public class CheckWinGame {
 					if (count == Constant.NUMBER_PIECE_WIN) {
 						return true;
 					}
+				} else {
+					count = 0;
 				}
 			}
 		}
@@ -219,6 +225,8 @@ public class CheckWinGame {
 					if (count == Constant.NUMBER_PIECE_WIN) {
 						return true;
 					}
+				} else {
+					count = 0;
 				}
 			}
 		}

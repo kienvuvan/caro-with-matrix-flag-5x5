@@ -89,7 +89,6 @@ public class ClickLabelCaroListener implements MouseListener {
 					// Kết thúc game
 					caroView.setPlayGame(false);
 					return false;
-					// Nếu máy thắng thì thông báo máy thắng
 				}
 				// Nếu đánh full bàn cờ mà chưa có người thắng (tức là cờ hòa)
 				if (caroView.getCount() == Constant.COLS * Constant.ROWS) {
@@ -98,6 +97,7 @@ public class ClickLabelCaroListener implements MouseListener {
 					caroView.setPlayGame(false);
 					return false;
 				}
+				// Người đánh thành công thì trả về true để đến lượt máy đánh
 				return true;
 			}
 		}
