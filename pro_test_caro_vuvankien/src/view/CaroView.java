@@ -41,7 +41,7 @@ public class CaroView {
 	private int count = 0;
 	private boolean playGame;
 	private JLabel[][] arrLabel = new JLabel[Constant.ROWS][Constant.COLS];
-	private static ArrayList<String> alFlagChess;
+	private ArrayList<String> alFlagChess;
 	private JButton btnGame;
 	private FindMoveComputer findMoveComputer;
 
@@ -255,10 +255,11 @@ public class CaroView {
 	}
 
 	/**
-	 * @param btnGame the btnGame to set
+	 * @param btnGame
+	 *            the btnGame to set
 	 */
 	public void setBtnGame(JButton btnGame) {
 		this.btnGame = btnGame;
 	}
-	
+
 }

@@ -30,23 +30,9 @@ public class CheckWinGame {
 	 *         chưa ai thắng
 	 */
 	public boolean checkWin(Pieces pieces, JLabel[][] arr) {
-		// Kết quả trả về khi kiểm tra win theo hàng ngang
-		if (checkWinRow(pieces, arr)) {
-			// Thắng trả về true
-			return true;
-		}
-		// Kết quả trả về khi kiểm tra win theo hàng dọc
-		if (checkWinCol(pieces, arr)) {
-			// Thắng trả về true
-			return true;
-		}
-		// Kết quả trả về khi kiểm tra win theo đường chéo trái
-		if (checkWinDiagonalLeft(pieces, arr)) {
-			// Thắng trả về true
-			return true;
-		}
-		// Kết quả trả về khi kiểm tra win theo đường chéo phải
-		if (checkWinDiagonalRight(pieces, arr)) {
+		// Kết quả trả về khi kiểm tra win
+		if (checkWinRow(pieces, arr) || checkWinCol(pieces, arr) || checkWinDiagonalLeft(pieces, arr)
+				|| checkWinDiagonalRight(pieces, arr)) {
 			// Thắng trả về true
 			return true;
 		}
@@ -79,7 +65,7 @@ public class CheckWinGame {
 		int count = 0;
 		// Duyệt kiểm tra và đếm số lượng các quân cờ giống nước vừa đánh trên
 		// hàng đi qua nước đó
-		for (int index = -4; index <= 4; index++) {
+		for (int index = -Constant.NUMBER_PIECE_WIN + 1; index <= Constant.NUMBER_PIECE_WIN - 1; index++) {
 			// Vị trí quân cờ nằm trong bàn cờ
 			if (col + index >= 0 && col + index < Constant.COLS) {
 				// Giá trị ô cờ bằng giá trị nước vừa đánh
@@ -124,7 +110,7 @@ public class CheckWinGame {
 		int count = 0;
 		// Duyệt kiểm tra và đếm số lượng các quân cờ giống nước vừa đánh trên
 		// cột đi qua nước đó
-		for (int index = -4; index <= 4; index++) {
+		for (int index = -Constant.NUMBER_PIECE_WIN + 1; index <= Constant.NUMBER_PIECE_WIN - 1; index++) {
 			// Vị trí quân cờ nằm trong bàn cờ
 			if (row + index >= 0 && row + index < Constant.ROWS) {
 				// Giá trị ô cờ bằng giá trị nước vừa đánh
@@ -169,7 +155,7 @@ public class CheckWinGame {
 		int count = 0;
 		// Duyệt kiểm tra và đếm số lượng các quân cờ giống nước vừa đánh trên
 		// đường chéo trái đi qua nước đó
-		for (int index = -4; index <= 4; index++) {
+		for (int index = -Constant.NUMBER_PIECE_WIN + 1; index <= Constant.NUMBER_PIECE_WIN - 1; index++) {
 			// Vị trí quân cờ nằm trong bàn cờ
 			if (col + index >= 0 && col + index < Constant.COLS && row + index >= 0 && row + index < Constant.ROWS) {
 				// Giá trị ô cờ bằng giá trị nước vừa đánh
@@ -214,7 +200,7 @@ public class CheckWinGame {
 		int count = 0;
 		// Duyệt kiểm tra và đếm số lượng các quân cờ giống nước vừa đánh trên
 		// đường chéo phải đi qua nước đó
-		for (int index = -4; index <= 4; index++) {
+		for (int index = -Constant.NUMBER_PIECE_WIN + 1; index <= Constant.NUMBER_PIECE_WIN - 1; index++) {
 			// Vị trí quân cờ nằm trong bàn cờ
 			if (col - index >= 0 && col - index < Constant.COLS && row + index >= 0 && row + index < Constant.ROWS) {
 				// Giá trị ô cờ bằng giá trị nước vừa đánh
