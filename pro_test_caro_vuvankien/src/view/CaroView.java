@@ -5,33 +5,32 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-import actionperform.ButtonNewGameActionPerform;
-import actionperform.ButtonStartGameActionPerform;
-import actionperform.LabelCaroActionPerform;
-import controller.ProcessGame;
-import model.Board;
+import actionperform.ButtonGameCaroActionPerform;
+import exception.EmptyListFlagChessException;
+import listener.ClickLabelCaroListener;
+import listener.WindowGameListener;
+import logic.FindMoveComputer;
 import model.Player;
 import utils.Constant;
 
 /**
  * Class giao diện game Caro
+ * 
  * @author kien vu
  *
  */
@@ -42,25 +41,9 @@ public class CaroView {
 	private int count = 0;
 	private boolean playGame;
 	private JLabel[][] arrLabel = new JLabel[Constant.ROWS][Constant.COLS];
-	private ProcessGame process;
-	private Board board;
 	private static ArrayList<String> alFlagChess;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CaroView window = new CaroView(false);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JButton btnGame;
+	private FindMoveComputer findMoveComputer;
 
 	/**
 	 * Create the application.
@@ -68,19 +51,29 @@ public class CaroView {
 	 * @param boolean
 	 *            playGame : Biến truyền vào để xác định tình trạng chơi game
 	 *            của bàn cờ
+	 * @throws IOException,
+	 *             EmptyStackException
+	 * @throws EmptyListFlagChessException
+	 * @throws Exception
 	 */
-	public CaroView(boolean playGame) {
+	public CaroView(boolean playGame) throws IOException, EmptyListFlagChessException {
 		// Thiết kế giao diện game
 		initialize();
+		// Gán giá trị tình trạng chơi game bằng tham số truyền vào
 		this.playGame = playGame;
-		process = new ProcessGame(this);
 		try {
+			// Tạo đối tượng FindMoveComputer
+			findMoveComputer = new FindMoveComputer();
 			// Lấy danh sách thế cờ 5x5
-			alFlagChess = process.getAllMove();
-		} catch (Exception e) {
-			System.out.println("Game đang lỗi");
+			alFlagChess = findMoveComputer.getAllMove();
+			// Nếu file rỗng
+			if (alFlagChess.isEmpty()) {
+				throw new EmptyListFlagChessException();
+			}
+		} catch (IOException e) {
+			e.getMessage();
+			throw e;
 		}
-		board = new Board(arrLabel);
 	}
 
 	/**
@@ -97,12 +90,14 @@ public class CaroView {
 		frame.setIconImage(image);
 		// Set trục x, trục y, độ rộng và chiều cao của frame
 		frame.setBounds(100, 100, 663, 559);
-		// Set thuộc tính thoát chương trình khi click nút X góc phải màn hình
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// Set thuộc tính không xử lý thoát chương trình khi click nút X góc
+		// phải màn hình
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		// Set layout cho frame (Không sử dụng layout)
 		frame.getContentPane().setLayout(null);
 		// Cho frame ra chính giữa màn hình
 		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
 		// Tạo Panel
 		JPanel panel = new JPanel();
 		// Set vị trí của panel và kích thước của bàn cờ
@@ -114,13 +109,15 @@ public class CaroView {
 		// Thêm panel vào frame
 		frame.getContentPane().add(panel);
 		// Tạo button StartGame với nhãn Start game
-		JButton btnStartGame = new JButton("Start game");
+		btnGame = new JButton("Start Game");
 		// Thêm sự kiện lắng nghe để bắt đầu game
-		btnStartGame.addActionListener(new ButtonStartGameActionPerform(this));
+		btnGame.addActionListener(new ButtonGameCaroActionPerform(this));
 		// Set vị trí và kích thước cho button Start Game
-		btnStartGame.setBounds(520, 11, 118, 23);
+		btnGame.setBounds(520, 11, 118, 23);
 		// Thêm button start game vào frame
-		frame.getContentPane().add(btnStartGame);
+		frame.getContentPane().add(btnGame);
+		// Thêm sự kiện lắng nghe sự kiện cửa sổ của game
+		frame.addWindowListener(new WindowGameListener());
 	}
 
 	/**
@@ -140,8 +137,13 @@ public class CaroView {
 				// Tạo border và set border cho label
 				Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
 				lb.setBorder(border);
+				// Set font chữ cho label
+				lb.setFont(new Font("SansSerif", Font.PLAIN, 20));
+				// Set thuộc tính text ở giữa label
+				lb.setVerticalAlignment(SwingConstants.CENTER);
+				lb.setHorizontalAlignment(SwingConstants.CENTER);
 				// Thêm sự kiện click chuột cho label
-				lb.addMouseListener(new LabelCaroActionPerform(this));
+				lb.addMouseListener(new ClickLabelCaroListener(this));
 			}
 		}
 	}
@@ -177,6 +179,7 @@ public class CaroView {
 
 	/**
 	 * Phương thức gán người chơi cho tham số truyền vào
+	 * 
 	 * @param player
 	 *            the player người chơi X hoặc O
 	 */
@@ -237,9 +240,25 @@ public class CaroView {
 	}
 
 	/**
-	 * @param frame the frame to set
+	 * @param frame
+	 *            the frame to set
 	 */
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
 	}
+
+	/**
+	 * @return the btnGame
+	 */
+	public JButton getBtnGame() {
+		return btnGame;
+	}
+
+	/**
+	 * @param btnGame the btnGame to set
+	 */
+	public void setBtnGame(JButton btnGame) {
+		this.btnGame = btnGame;
+	}
+	
 }

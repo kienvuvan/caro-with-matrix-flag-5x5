@@ -19,4 +19,5 @@ public class Constant {
 	public static final int HUMAN_WIN = 1;
 	public static final int COMPUTER_WIN = 2;
 	public static final int FLAG_MATRIX_SIZE = 5;
+	public static final int NUMBER_PIECE_WIN = 5;
 }
