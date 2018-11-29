@@ -2,7 +2,7 @@
  * Copyright (C) 2018 Luvina Academy
  * LabelCaroActionPerform.java 12/11/2018, Vũ Văn Kiên
  */
-package listener;
+package controller;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -10,11 +10,11 @@ import java.awt.event.MouseListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import common.Constant;
 import logic.CheckWinGame;
 import logic.FindMoveComputer;
 import model.Pieces;
 import model.Player;
-import utils.Constant;
 import view.CaroView;
 
 /**
@@ -26,6 +26,7 @@ import view.CaroView;
 public class ClickLabelCaroListener implements MouseListener {
 
 	private CaroView caroView;
+	private JLabel[][] arrLabel;
 
 	/**
 	 * Contructor khởi tạo đối tượng LabelCaroActionPerform
@@ -35,6 +36,7 @@ public class ClickLabelCaroListener implements MouseListener {
 	 */
 	public ClickLabelCaroListener(CaroView caroView) {
 		this.caroView = caroView;
+		arrLabel = caroView.getArrLabel();
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public class ClickLabelCaroListener implements MouseListener {
 	 *            Label cần đánh
 	 * @return true : Đánh thành công, false : Đánh không thành công
 	 */
-	public boolean humanMove(JLabel labelHumanMove) {
+	private boolean humanMove(JLabel labelHumanMove) {
 		// Nếu lượt đi là của người chơi
 		if (caroView.getPlayer() == Player.X) {
 			// Nếu nước đi đó chưa đánh (Label có nhãn rỗng)
@@ -79,9 +81,9 @@ public class ClickLabelCaroListener implements MouseListener {
 				caroView.setPlayer(Player.convertPlayer(caroView.getPlayer()));
 				// Tăng biến đếm số lượng các nước đã đi lên 1
 				caroView.setCount(caroView.getCount() + 1);
-				CheckWinGame checkWinGame = new CheckWinGame();
+				CheckWinGame checkWinGame = new CheckWinGame(arrLabel);
 				// Lấy giá trị kiểm tra chiến thắng của nước vừa đi
-				boolean win = checkWinGame.checkWin(new Pieces("X", yRow, xCol), caroView.getArrLabel());
+				boolean win = checkWinGame.checkWin(new Pieces("X", yRow, xCol));
 				// Nếu người chơi thắng thì thông báo bạn thắng
 				if (win) {
 					JOptionPane.showMessageDialog(null, "Bạn thắng");
@@ -108,7 +110,7 @@ public class ClickLabelCaroListener implements MouseListener {
 	/**
 	 * Phương thức máy đánh
 	 */
-	public void computerMove() {
+	private void computerMove() {
 		JLabel[][] arrLabel = caroView.getArrLabel();
 		// Tiến hành tìm nước cờ phù hợp nhất để máy đánh
 		FindMoveComputer findMoveComputer = new FindMoveComputer();
@@ -125,9 +127,9 @@ public class ClickLabelCaroListener implements MouseListener {
 			caroView.setPlayer(Player.convertPlayer(caroView.getPlayer()));
 			// Tăng biến đếm số lượng các nước đã đi lên 1
 			caroView.setCount(caroView.getCount() + 1);
-			CheckWinGame checkWinGame = new CheckWinGame();
+			CheckWinGame checkWinGame = new CheckWinGame(arrLabel);
 			// Lấy giá trị kiểm tra chiến thắng của nước vừa đi
-			boolean win = checkWinGame.checkWin(pieces, arrLabel);
+			boolean win = checkWinGame.checkWin(pieces);
 			// Nếu người chơi thắng thì thông báo bạn thắng
 			if (win) {
 				JOptionPane.showMessageDialog(null, "Máy thắng");

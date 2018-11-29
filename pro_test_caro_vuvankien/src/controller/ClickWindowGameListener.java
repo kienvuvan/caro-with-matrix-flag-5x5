@@ -2,7 +2,7 @@
  * Copyright (C) 2018 Luvina Academy
  * CaroView.java 12/11/2018, Vũ Văn Kiên
  */
-package listener;
+package controller;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  * @author kien vu
  *
  */
-public class WindowGameListener implements WindowListener {
+public class ClickWindowGameListener implements WindowListener {
 
 	@Override
 	public void windowActivated(WindowEvent e) {

@@ -10,6 +10,7 @@ package exception;
  * @author kien vu
  *
  */
+@SuppressWarnings("serial")
 public class EmptyListFlagChessException extends Exception {
 
 	/**

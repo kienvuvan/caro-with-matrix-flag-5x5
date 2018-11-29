@@ -5,9 +5,8 @@
 package logic;
 
 import javax.swing.JLabel;
-
+import common.Constant;
 import model.Pieces;
-import utils.Constant;
 
 /**
  * Class dùng để kiểm tra chiến thắng khi chơi game caro
@@ -17,22 +16,35 @@ import utils.Constant;
  */
 public class CheckWinGame {
 
+	// Khai báo biến đối tượng bàn cờ cần kiểm tra
+	private JLabel[][] arrLabel;
+
+	/**
+	 * Phương thức khởi tạo đối tượng CheckWinGame với tham số truyền vào là
+	 * mảng bàn cờ
+	 */
+	public CheckWinGame(JLabel[][] arrLabel) {
+		this.arrLabel = arrLabel;
+	}
+
 	/**
 	 * Phương thức kiểm tra thắng game
 	 * 
 	 * @param pieces
 	 *            ô cờ vừa đánh vào bàn cờ
-	 * @param arr
-	 *            mảng các ô cờ trên bàn cờ
-	 * @param player
-	 *            lượt đi của ai X hay O
 	 * @return giá trị kiểm tra chiến thắng. 1 - người thắng, 2 - máy thắng, 0 -
 	 *         chưa ai thắng
 	 */
-	public boolean checkWin(Pieces pieces, JLabel[][] arr) {
+	public boolean checkWin(Pieces pieces) {
+		// Lấy giá trị hàng của nước vừa đánh và cần kiểm tra
+		int row = pieces.getRow();
+		// Lấy giá trị cột của nước vừa đánh và cần kiểm tra
+		int col = pieces.getCol();
+		// Lấy giá trị của ô cờ cần kiểm tra thắng
+		String typePlayer = pieces.getValue();
 		// Kết quả trả về khi kiểm tra win
-		if (checkWinRow(pieces, arr) || checkWinCol(pieces, arr) || checkWinDiagonalLeft(pieces, arr)
-				|| checkWinDiagonalRight(pieces, arr)) {
+		if (checkWinRow(row, col, typePlayer) || checkWinCol(row, col, typePlayer)
+				|| checkWinDiagonalLeft(row, col, typePlayer) || checkWinDiagonalRight(row, col, typePlayer)) {
 			// Thắng trả về true
 			return true;
 		}
@@ -44,22 +56,16 @@ public class CheckWinGame {
 	/**
 	 * Phương thức kiểm tra chiến thắng theo hàng ngang
 	 * 
-	 * @param pieces
-	 *            nước cờ vừa đánh và cần kiểm tra
-	 * @param arr
-	 *            mảng JLabel (bàn cờ)
-	 * @param symbolPlayer
-	 *            ký hiệu đại diện cho loại người chơi. "X" là người. "O" là máy
+	 * @param row
+	 *            vị trí hàng của nước cần kiểm tra
+	 * @param col
+	 *            vị trí cột của nước cần kiểm tra
+	 * @param typePlayer
+	 *            người chơi (X hay O) nước cờ vừa đánh và cần kiểm tra
 	 * @return giá trị của kiểm tra chiến thắng. 1 - Người thắng. 2 - Máy thắng.
 	 *         3 - Giá trị mặc định (Chưa ai thắng)
 	 */
-	public boolean checkWinRow(Pieces pieces, JLabel[][] arrLabel) {
-		// Lấy giá trị hàng của nước vừa đánh và cần kiểm tra
-		int row = pieces.getRow();
-		// Lấy giá trị cột của nước vừa đánh và cần kiểm tra
-		int col = pieces.getCol();
-		// Lấy giá trị của ô cờ cần kiểm tra thắng
-		String typePlayer = pieces.getValue();
+	private boolean checkWinRow(int row, int col, String typePlayer) {
 		// Tạo biến đếm số lượng ô cờ liên tiếp giống nước vừa đi trên hàng
 		// ngang có chứa nước cần kiểm tra
 		int count = 0;
@@ -89,22 +95,16 @@ public class CheckWinGame {
 	/**
 	 * Phương thức kiểm tra chiến thắng theo cột dọc
 	 * 
-	 * @param pieces
-	 *            nước cờ vừa đánh và cần kiểm tra
-	 * @param arr
-	 *            mảng JLabel (bàn cờ)
-	 * @param symbolPlayer
-	 *            ký hiệu đại diện cho loại người chơi. "X" là người. "O" là máy
+	 * @param row
+	 *            vị trí hàng của nước cần kiểm tra
+	 * @param col
+	 *            vị trí cột của nước cần kiểm tra
+	 * @param typePlayer
+	 *            người chơi (X hay O) nước cờ vừa đánh và cần kiểm tra
 	 * @return giá trị của kiểm tra chiến thắng. 1 - Người thắng. 2 - Máy thắng.
 	 *         3 - Giá trị mặc định (Chưa ai thắng)
 	 */
-	public boolean checkWinCol(Pieces pieces, JLabel[][] arrLabel) {
-		// Lấy giá trị hàng của nước vừa đánh và cần kiểm tra
-		int row = pieces.getRow();
-		// Lấy giá trị cột của nước vừa đánh và cần kiểm tra
-		int col = pieces.getCol();
-		// Lấy giá trị của ô cờ cần kiểm tra thắng
-		String typePlayer = pieces.getValue();
+	private boolean checkWinCol(int row, int col, String typePlayer) {
 		// Tạo biến đếm số lượng ô cờ liên tiếp giống nước vừa đi trên cột có
 		// chứa nước cần kiểm tra
 		int count = 0;
@@ -134,22 +134,16 @@ public class CheckWinGame {
 	/**
 	 * Phương thức kiểm tra chiến thắng theo đường chéo trái
 	 * 
-	 * @param pieces
-	 *            nước cờ vừa đánh và cần kiểm tra
-	 * @param arr
-	 *            mảng JLabel (bàn cờ)
-	 * @param symbolPlayer
-	 *            ký hiệu đại diện cho loại người chơi. "X" là người. "O" là máy
+	 * @param row
+	 *            vị trí hàng của nước cần kiểm tra
+	 * @param col
+	 *            vị trí cột của nước cần kiểm tra
+	 * @param typePlayer
+	 *            người chơi (X hay O) nước cờ vừa đánh và cần kiểm tra
 	 * @return giá trị của kiểm tra chiến thắng. 1 - Người thắng. 2 - Máy thắng.
 	 *         3 - Giá trị mặc định (Chưa ai thắng)
 	 */
-	public boolean checkWinDiagonalLeft(Pieces pieces, JLabel[][] arrLabel) {
-		// Lấy giá trị hàng của nước vừa đánh và cần kiểm tra
-		int row = pieces.getRow();
-		// Lấy giá trị cột của nước vừa đánh và cần kiểm tra
-		int col = pieces.getCol();
-		// Lấy giá trị của ô cờ cần kiểm tra thắng
-		String typePlayer = pieces.getValue();
+	private boolean checkWinDiagonalLeft(int row, int col, String typePlayer) {
 		// Tạo biến đếm số lượng ô cờ liên tiếp trên đường chéo có chứa nước cần
 		// kiểm tra
 		int count = 0;
@@ -179,22 +173,16 @@ public class CheckWinGame {
 	/**
 	 * Phương thức kiểm tra chiến thắng theo đường chéo phải
 	 * 
-	 * @param pieces
-	 *            nước cờ vừa đánh và cần kiểm tra
-	 * @param arr
-	 *            mảng JLabel (bàn cờ)
-	 * @param symbolPlayer
-	 *            ký hiệu đại diện cho loại người chơi. "X" là người. "O" là máy
+	 * @param row
+	 *            vị trí hàng của nước cần kiểm tra
+	 * @param col
+	 *            vị trí cột của nước cần kiểm tra
+	 * @param typePlayer
+	 *            người chơi (X hay O) nước cờ vừa đánh và cần kiểm tra
 	 * @return giá trị của kiểm tra chiến thắng. 1 - Người thắng. 2 - Máy thắng.
 	 *         3 - Giá trị mặc định (Chưa ai thắng)
 	 */
-	public boolean checkWinDiagonalRight(Pieces pieces, JLabel[][] arrLabel) {
-		// Lấy giá trị hàng của nước vừa đánh và cần kiểm tra
-		int row = pieces.getRow();
-		// Lấy giá trị cột của nước vừa đánh và cần kiểm tra
-		int col = pieces.getCol();
-		// Lấy giá trị của ô cờ cần kiểm tra thắng
-		String typePlayer = pieces.getValue();
+	private boolean checkWinDiagonalRight(int row, int col, String typePlayer) {
 		// Tạo biến đếm số lượng ô cờ liên tiếp trên đường chéo có chứa nước cần
 		// kiểm tra
 		int count = 0;

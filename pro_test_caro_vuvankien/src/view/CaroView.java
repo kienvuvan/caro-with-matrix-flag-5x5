@@ -20,13 +20,13 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-import actionperform.ButtonGameCaroActionPerform;
+import common.Constant;
+import controller.ClickButtonCaroActionPerform;
+import controller.ClickLabelCaroListener;
+import controller.ClickWindowGameListener;
 import exception.EmptyListFlagChessException;
-import listener.ClickLabelCaroListener;
-import listener.WindowGameListener;
-import logic.FindMoveComputer;
+import logic.ReadFileFlagChess;
 import model.Player;
-import utils.Constant;
 
 /**
  * Class giao diện game Caro
@@ -43,7 +43,7 @@ public class CaroView {
 	private JLabel[][] arrLabel = new JLabel[Constant.ROWS][Constant.COLS];
 	private ArrayList<String> alFlagChess;
 	private JButton btnGame;
-	private FindMoveComputer findMoveComputer;
+	private ReadFileFlagChess fileFlagChess;
 
 	/**
 	 * Create the application.
@@ -62,10 +62,10 @@ public class CaroView {
 		// Gán giá trị tình trạng chơi game bằng tham số truyền vào
 		this.playGame = playGame;
 		try {
-			// Tạo đối tượng FindMoveComputer
-			findMoveComputer = new FindMoveComputer();
+			// Tạo đối tượng FileFlagChess
+			fileFlagChess = new ReadFileFlagChess();
 			// Lấy danh sách thế cờ 5x5
-			alFlagChess = findMoveComputer.getAllMove();
+			alFlagChess = fileFlagChess.getAllMove();
 			// Nếu file rỗng
 			if (alFlagChess.isEmpty()) {
 				throw new EmptyListFlagChessException();
@@ -111,13 +111,13 @@ public class CaroView {
 		// Tạo button StartGame với nhãn Start game
 		btnGame = new JButton("Start Game");
 		// Thêm sự kiện lắng nghe để bắt đầu game
-		btnGame.addActionListener(new ButtonGameCaroActionPerform(this));
+		btnGame.addActionListener(new ClickButtonCaroActionPerform(this));
 		// Set vị trí và kích thước cho button Start Game
 		btnGame.setBounds(520, 11, 118, 23);
 		// Thêm button start game vào frame
 		frame.getContentPane().add(btnGame);
 		// Thêm sự kiện lắng nghe sự kiện cửa sổ của game
-		frame.addWindowListener(new WindowGameListener());
+		frame.addWindowListener(new ClickWindowGameListener());
 	}
 
 	/**

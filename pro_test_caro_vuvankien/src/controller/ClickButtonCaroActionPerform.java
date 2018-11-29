@@ -2,7 +2,7 @@
  * Copyright (C) 2018 Luvina Academy
  * ButtonNewGameActionPerform.java 12/11/2018, Vũ Văn Kiên
  */
-package actionperform;
+package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,8 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import common.Constant;
 import model.Player;
-import utils.Constant;
 import view.CaroView;
 
 /**
@@ -22,12 +22,12 @@ import view.CaroView;
  * @author kien vu
  *
  */
-public class ButtonGameCaroActionPerform implements ActionListener {
+public class ClickButtonCaroActionPerform implements ActionListener {
 	private CaroView caroView;
 	private JLabel[][] arrLabel;
 
 	// Phương thức khởi tạo đối tượng ButtonNewGameActionPerform
-	public ButtonGameCaroActionPerform(CaroView caroView) {
+	public ClickButtonCaroActionPerform(CaroView caroView) {
 		this.caroView = caroView;
 		arrLabel = caroView.getArrLabel();
 	}
@@ -59,7 +59,7 @@ public class ButtonGameCaroActionPerform implements ActionListener {
 	/**
 	 * Phương thức tạo game mới
 	 */
-	public void newGame() {
+	private void newGame() {
 		// Nếu game đang chơi
 		if (caroView.isPlayGame()) {
 			// Hỏi người chơi có muốn chơi lại không?
@@ -75,38 +75,43 @@ public class ButtonGameCaroActionPerform implements ActionListener {
 				break;
 			}
 		} else {
-			// Nếu game đã kết thúc thì sẽ thông báo game mới
-			JOptionPane.showMessageDialog(null, "Game mới");
 			// Bắt đầu game
-			setStartGame();
+			if(setStartGame()){
+				// Nếu game đã kết thúc thì sẽ thông báo game mới
+				JOptionPane.showMessageDialog(null, "Game mới");
+			}
 		}
 	}
 
 	/**
 	 * Phương thức bắt đầu game
 	 */
-	public boolean setStartGame() {
+	private boolean setStartGame() {
 		// Hỏi người chơi ai đánh trước
 		int input = JOptionPane.showConfirmDialog(null, "Bạn đi trước");
-		// Máy đánh trước
-		if (input != JOptionPane.CANCEL_OPTION) {
-			// Set tình trạng game về true để tiến hành chơi
-			caroView.setPlayGame(true);
-			// Reset bàn cờ
-			resetBoard(arrLabel);
-			if (input == JOptionPane.NO_OPTION) {
-				// Đánh 1 nước chính sữa bàn cờ
-				arrLabel[Constant.ROWS / 2][Constant.COLS / 2].setText("O");
-				// Đổi lượt cho người chơi
+		if (input < 0) {
+			return false;
+		} else {
+			// Máy đánh trước
+			if (input != JOptionPane.CANCEL_OPTION) {
+				// Set tình trạng game về true để tiến hành chơi
+				caroView.setPlayGame(true);
+				// Reset bàn cờ
+				resetBoard(arrLabel);
+				if (input == JOptionPane.NO_OPTION) {
+					// Đánh 1 nước chính sữa bàn cờ
+					arrLabel[Constant.ROWS / 2][Constant.COLS / 2].setText("O");
+					// Đổi lượt cho người chơi
+					caroView.setPlayer(Player.X);
+					// Tăng biến đếm nước đi lên 1
+					caroView.setCount(caroView.getCount() + 1);
+				}
+				// Người đánh
 				caroView.setPlayer(Player.X);
-				// Tăng biến đếm nước đi lên 1
-				caroView.setCount(caroView.getCount() + 1);
+				return true;
 			}
-			// Người đánh
-			caroView.setPlayer(Player.X);
-			return true;
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -115,7 +120,7 @@ public class ButtonGameCaroActionPerform implements ActionListener {
 	 * @param arrLabel
 	 *            Mảng các ô cờ
 	 */
-	public void resetBoard(JLabel[][] arrLabel) {
+	private void resetBoard(JLabel[][] arrLabel) {
 		// Reset tất cả các giá trị của label về ""
 		for (int i = 0; i < Constant.ROWS; i++) {
 			for (int j = 0; j < Constant.COLS; j++) {
